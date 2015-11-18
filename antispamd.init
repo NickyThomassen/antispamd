@@ -1,0 +1,74 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          antispamd
+# Required-Start:    $local_fs $remote_fs $network
+# Required-Stop:     $local_fs $remote_fs $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start or stop the antispamd daemon.
+### END INIT INFO
+#
+# init-script for the glue program to make Postfix, Dovecot and
+# SpamAssassin more tightly integrated.
+#    *Made by mad hound nicky*
+#        nicky@aptget.dk
+#
+# Version 0.1, 01/11 2013
+#   License = GPLv2
+#
+################################################################################
+#
+NAME="antispamd"
+DAEMON="/usr/local/bin/$NAME.pl"
+if [ -e "/var/run/$NAME.pid" ]; then
+  PID="$(cat /var/run/$NAME.pid)"
+fi
+
+if [ ! -x "$DAEMON" ]; then
+  echo "$NAME was not found or is not executeable, exiting."
+  exit 10
+fi
+
+case "$1" in
+  start)
+    if [ ! "$PID" ]; then
+      echo -n "Starting $NAME"
+      /usr/local/bin/antispamd.pl
+      echo "."
+    else
+      echo "$NAME already runs with PID $PID."
+      exit 10
+    fi
+    exit 0
+  ;;
+  stop)
+    if [ "$PID" ]; then
+      echo -n "Stopping $NAME"
+      kill $PID
+      echo "."
+    else
+      echo "$NAME is not running."
+      exit 10
+    fi
+    exit 0
+  ;;
+  reload|restart|force-reload)
+    $0 stop
+    sleep 1
+    $0 start
+    exit 0
+  ;;
+  status)
+    if [ "$PID" ]; then
+      echo "$NAME runs with PID $PID"
+    else
+      echo "$NAME is not running"
+    fi
+    exit 0
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|reload|force-reload|restart|status}"
+    exit 0
+  ;;
+esac
+exit 0
