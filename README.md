@@ -14,7 +14,7 @@ It's written as a daemon, compared to a script cron could run, to ensure it's fa
 
 It's designed to run for months on end, and only supports the most basic features, with the sole purpose to enhance a mailserver. Please note that other solutions exists to train a SpamAssassin instance, and that this setup requires Dovecot and SpamAssassin to be on the same machine. One way to circumvent this limitation would be to use NFS mounted directorys from the server running SpamAssassin.
 
-The init-script depends on the daemon being located in /usr/local/bin/antispamd.pl, but this can be changed be editing the init-script, line 11 and 12. Please don't edit line 13, the location of the PID-file, since the daemon itself is hardcoded to use this location, unless you also change the daemon, line 59.
+The init-script depends on the daemon being located in /usr/local/bin/antispamd.pl, but this can be changed by editing the init-script, line 11 and 12. Please don't edit line 13, the location of the PID-file, since the daemon itself is hardcoded to use this location, unless you also change the daemon, line 59.
 
 So, to install antispamd on Debian, simply cp/mv antispamd.pl to /usr/local/bin/antispamd.pl, cp/mv antispamd.init to /etc/init.d/antispamd, cp/mv antispamd.conf to /etc/default/antispamd.conf (if you plan on using it) and delete this file. The daemon and the init-script needs the execution bit set, which can be done with "chmod +x /usr/local/bin/antispamd.pl" and "chmod +x /etc/init.d/antispamd" and if antispamd.pl should start at boot, init needs to be updated with something like "update-rc.d antispamd defaults". Please read the manual pages for chmod and update-rc.d before using them from some random document.
 
